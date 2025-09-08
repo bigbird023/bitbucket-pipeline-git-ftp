@@ -1,0 +1,41 @@
+name: Docker Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'tags/*'
+  schedule:
+    - cron: '0 2 * * 0' # Every Sunday at 10 PM Eastern (converted to UTC)
+
+jobs:
+  main-branch:
+    name: Main Branch Pipeline
+    uses: bigbird023/github-actions/.github/workflows/docker-pipelines-workflow.yaml@main
+    with:
+      pipeline_type: main
+      docker_image: my-docker-image
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  tag-pipeline:
+    name: Tag Pipeline
+    uses: bigbird023/github-actions/.github/workflows/docker-pipelines-workflow.yaml@main
+    with:
+      pipeline_type: tag
+      docker_image: my-docker-image
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  scheduled-pipeline:
+    name: Scheduled Pipeline
+    uses: bigbird023/github-actions/.github/workflows/docker-pipelines-workflow.yaml@main
+    with:
+      pipeline_type: scheduled
+      docker_image: my-docker-image
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
